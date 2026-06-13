@@ -111,6 +111,19 @@
       border-color: rgba(245,240,232,0.7);
     }
 
+
+    /* SHARE / WEATHER BADGE */
+    button.badge {
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+    }
+    button.badge:hover, a.badge:hover {
+      background: rgba(0,0,0,0.5);
+      border-color: rgba(245,240,232,0.7);
+    }
+
     /* COUNTDOWN */
     .countdown-section {
       background: var(--moss);
@@ -535,10 +548,13 @@
   <h1>Chilling<br><em>Friends & Family</em></h1>
   <p class="header-meta">La Roche-en-Ardenne · 20 t/m 27 juli 2026</p>
   <div class="header-badges">
-    <span class="badge">🏡 Groepsaccommodatie</span>
-    <span class="badge">📅 7 nachten</span>
-    <span class="badge">🇧🇪 Ardennen</span>
+    <a class="badge" href="https://www.heerlijkehuisjes.nl/vakantiehuis-la-roche-en-ardenne/ARD1134" target="_blank">🏡 Groepsaccommodatie</a>
+    <a class="badge" href="#agenda-list">📅 7 nachten</a>
+    <a class="badge" href="https://www.roche-en-ardenne.be/" target="_blank">🇧🇪 Ardennen</a>
     <a class="badge" href="https://www.google.com/maps/dir/?api=1&destination=La+Roche-en-Ardenne+Belgium" target="_blank">🗺️ Route erheen</a>
+    <span class="badge" id="weather-badge">🌡️ …</span>
+    <button class="badge" onclick="shareLink()">🔗 Deel</button>
+    <a class="badge" href="https://tevrederamses.github.io/Boodschappenlijst-/" target="_blank">🛒 Boodschappenlijst</a>
   </div>
 </header>
 
@@ -815,6 +831,8 @@
       const desc = codes[c.weathercode] || '🌡️';
       document.getElementById('weather-display').textContent =
         `${desc} · ${Math.round(c.temperature_2m)}°C · 💨 ${Math.round(c.windspeed_10m)} km/u`;
+      const badge = document.getElementById('weather-badge');
+      if (badge) badge.textContent = `🌡️ ${Math.round(c.temperature_2m)}°C`;
     } catch {
       document.getElementById('weather-display').textContent = 'Niet beschikbaar';
     }
@@ -883,6 +901,19 @@
     if (e.key === 'Enter') addEntry();
   });
 
+
+
+  // SHARE
+  function shareLink() {
+    const btn = document.querySelector('button.badge[onclick="shareLink()"]');
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = '✅ Gekopieerd!';
+      setTimeout(() => btn.textContent = orig, 2000);
+    }).catch(() => {
+      prompt('Kopieer deze link:', window.location.href);
+    });
+  }
 
   // AGENDA INPUTS - localStorage opslag
   const agendaStore = JSON.parse(localStorage.getItem('rack-agenda') || '{}');
