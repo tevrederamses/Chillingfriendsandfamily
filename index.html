@@ -454,6 +454,7 @@
     .agenda-input {
       border: none;
       border-bottom: 1px solid transparent;
+      display: none;
       background: transparent;
       font-family: 'Inter', sans-serif;
       color: var(--text);
@@ -466,8 +467,8 @@
       border-bottom-color: var(--green-mid);
     }
     .agenda-input::placeholder { color: var(--muted); opacity: 0.5; }
-    .agenda-title { font-size: 0.9rem; font-weight: 500; }
-    .agenda-sub { font-size: 0.78rem; color: var(--muted); }
+    .agenda-title { font-size: 0.9rem; font-weight: 500; display: block; }
+    .agenda-sub { font-size: 0.78rem; color: var(--muted); display: block; margin-top: 0.1rem; }
 
     /* ── NOTEPAD ─────────────────────────────────── */
     .notepad-section {
@@ -896,15 +897,15 @@
       <span class="collapse-chevron">▾</span>
     </button>
     <div id="agenda-body" style="display:none;">
-    <ul class="agenda-list" id="agenda-list">
-      <li class="agenda-item"><span class="agenda-tag gold">Ma 20 jul</span><div class="agenda-content"><input class="agenda-input agenda-title" type="text" placeholder="Activiteit…" data-key="ma20-title" /><input class="agenda-input agenda-sub" type="text" placeholder="Toelichting…" data-key="ma20-sub" /></div></li>
-      <li class="agenda-item"><span class="agenda-tag">Di 21 jul</span><div class="agenda-content"><input class="agenda-input agenda-title" type="text" placeholder="Activiteit…" data-key="di21-title" /><input class="agenda-input agenda-sub" type="text" placeholder="Toelichting…" data-key="di21-sub" /></div></li>
-      <li class="agenda-item"><span class="agenda-tag">Wo 22 jul</span><div class="agenda-content"><input class="agenda-input agenda-title" type="text" placeholder="Activiteit…" data-key="wo22-title" /><input class="agenda-input agenda-sub" type="text" placeholder="Toelichting…" data-key="wo22-sub" /></div></li>
-      <li class="agenda-item"><span class="agenda-tag">Do 23 jul</span><div class="agenda-content"><input class="agenda-input agenda-title" type="text" placeholder="Activiteit…" data-key="do23-title" /><input class="agenda-input agenda-sub" type="text" placeholder="Toelichting…" data-key="do23-sub" /></div></li>
-      <li class="agenda-item"><span class="agenda-tag">Vr 24 jul</span><div class="agenda-content"><input class="agenda-input agenda-title" type="text" placeholder="Activiteit…" data-key="vr24-title" /><input class="agenda-input agenda-sub" type="text" placeholder="Toelichting…" data-key="vr24-sub" /></div></li>
-      <li class="agenda-item"><span class="agenda-tag">Za 25 jul</span><div class="agenda-content"><input class="agenda-input agenda-title" type="text" placeholder="Activiteit…" data-key="za25-title" /><input class="agenda-input agenda-sub" type="text" placeholder="Toelichting…" data-key="za25-sub" /></div></li>
-      <li class="agenda-item"><span class="agenda-tag">Zo 26 jul</span><div class="agenda-content"><input class="agenda-input agenda-title" type="text" placeholder="Activiteit…" data-key="zo26-title" /><input class="agenda-input agenda-sub" type="text" placeholder="Toelichting…" data-key="zo26-sub" /></div></li>
-      <li class="agenda-item"><span class="agenda-tag gold">Ma 27 jul</span><div class="agenda-content"><input class="agenda-input agenda-title" type="text" placeholder="Activiteit…" data-key="ma27-title" /><input class="agenda-input agenda-sub" type="text" placeholder="Toelichting…" data-key="ma27-sub" /></div></li>
+    <ul class="agenda-list">
+      <li class="agenda-item"><span class="agenda-tag gold">Ma 20 jul</span><div class="agenda-content"><span class="agenda-title">Aankomst 🚗</span><span class="agenda-sub">Check-in vanaf 17:00 · Eigen maaltijd</span></div></li>
+      <li class="agenda-item"><span class="agenda-tag">Di 21 jul</span><div class="agenda-content"><span class="agenda-title">Kidsclub 13–16u 🧒 · Tante Eugenie kookt 🍲</span><span class="agenda-sub">Moksi Alesi of Pasta · Tikkie vooraf</span></div></li>
+      <li class="agenda-item"><span class="agenda-tag">Wo 22 jul</span><div class="agenda-content"><span class="agenda-title">Kidsclub 13–16u 🧒 · Jacqueline kookt 🍜 · Karaoke avond 🎤</span><span class="agenda-sub">Saoto · Dennis neemt JBL box mee</span></div></li>
+      <li class="agenda-item"><span class="agenda-tag">Do 23 jul</span><div class="agenda-content"><span class="agenda-title">Kidsclub 13–16u 🧒 · Tante Eugenie kookt 🍲</span><span class="agenda-sub">Moksi Alesi of Pasta · Tikkie vooraf</span></div></li>
+      <li class="agenda-item"><span class="agenda-tag">Vr 24 jul</span><div class="agenda-content"><span class="agenda-title">Kidsclub 13–16u 🧒 · Gezamenlijke BBQ 🔥</span><span class="agenda-sub">Kosten worden verdeeld · opgeven: vegetarisch / allergieën</span></div></li>
+      <li class="agenda-item"><span class="agenda-tag">Za 25 jul</span><div class="agenda-content"><span class="agenda-title">Kidsclub 13–16u 🧒 · Bonte Avond 20:00u 🎉 · Eigen maaltijd</span><span class="agenda-sub">Thema via poll · prijs voor leukste bijdrage</span></div></li>
+      <li class="agenda-item"><span class="agenda-tag">Zo 26 jul</span><div class="agenda-content"><span class="agenda-title">Gezamenlijk opruimen 🧹</span><span class="agenda-sub">Keuken niet voor uitgebreid koken · groepsfoto!</span></div></li>
+      <li class="agenda-item"><span class="agenda-tag gold">Ma 27 jul</span><div class="agenda-content"><span class="agenda-title">Vertrek 🏠</span><span class="agenda-sub">Sleutels inleveren 09:30 · Check-out 10:00</span></div></li>
     </ul>
     </div>
   </div>
@@ -1115,42 +1116,6 @@
     }
   }
   loadWeather();
-
-  // AGENDA INPUTS - localStorage opslag
-  const agendaDefaults = {
-    'ma20-title': 'Aankomst 🚗',
-    'ma20-sub':   'Check-in vanaf 17:00 · Eigen maaltijd',
-    'di21-title': 'Kidsclub 13–16u 🧒 · Tante Eugenie kookt 🍲',
-    'di21-sub':   'Moksi Alesi of Pasta · Tikkie vooraf',
-    'wo22-title': 'Kidsclub 13–16u 🧒 · Jacqueline kookt 🍜 · Karaoke avond 🎤',
-    'wo22-sub':   'Saoto · Dennis neemt JBL box mee',
-    'do23-title': 'Kidsclub 13–16u 🧒 · Tante Eugenie kookt 🍲',
-    'do23-sub':   'Moksi Alesi of Pasta · Tikkie vooraf',
-    'vr24-title': 'Kidsclub 13–16u 🧒 · Gezamenlijke BBQ 🔥',
-    'vr24-sub':   'Kosten worden verdeeld · opgeven: vegetarisch / allergieën',
-    'za25-title': 'Kidsclub 13–16u 🧒 · Bonte Avond 20:00u 🎉 · Eigen maaltijd',
-    'za25-sub':   'Thema via poll · prijs voor leukste bijdrage',
-    'zo26-title': 'Gezamenlijk opruimen 🧹',
-    'zo26-sub':   'Keuken niet voor uitgebreid koken · groepsfoto!',
-    'ma27-title': 'Vertrek 🏠',
-    'ma27-sub':   'Sleutels inleveren 09:30 · Check-out 10:00',
-  };
-  const agendaStore = Object.assign({}, agendaDefaults);
-  const _saved = JSON.parse(localStorage.getItem('rack-agenda') || '{}');
-  Object.keys(_saved).forEach(k => { if (_saved[k]) agendaStore[k] = _saved[k]; });
-
-  function saveAgenda() {
-    localStorage.setItem('rack-agenda', JSON.stringify(agendaStore));
-  }
-
-  document.querySelectorAll('.agenda-input').forEach(input => {
-    const key = input.dataset.key;
-    if (agendaStore[key]) input.value = agendaStore[key];
-    input.addEventListener('input', () => {
-      agendaStore[key] = input.value;
-      saveAgenda();
-    });
-  });
 
   // COLLAPSE HELPERS
   function toggleSection(bodyId, btn) {
