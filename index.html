@@ -107,16 +107,27 @@
       flex-wrap: wrap;
       margin-top: 1.75rem;
     }
-    .badge {
-      border: 1px solid rgba(255,255,255,0.25);
-      padding: 0.35rem 1rem;
+    .hdr-btn {
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 0.5rem 1.1rem;
       border-radius: 2rem;
-      font-size: 0.73rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      color: rgba(255,255,255,0.9);
-      background: rgba(255,255,255,0.1);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #fff;
+      background: rgba(255,255,255,0.12);
       backdrop-filter: blur(8px);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.15s, border-color 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .hdr-btn:hover {
+      background: rgba(255,255,255,0.22);
+      border-color: rgba(255,255,255,0.5);
     }
 
     /* ── COUNTDOWN ───────────────────────────────── */
@@ -631,7 +642,7 @@
     .theme-toggle {
       position: fixed;
       top: 1rem;
-      right: 1rem;
+      left: 1rem;
       z-index: 100;
       background: rgba(255,255,255,0.15);
       backdrop-filter: blur(12px);
@@ -680,6 +691,56 @@
       color: #fff;
     }
 
+
+    /* ── COLLAPSIBLE HEADERS ─────────────────────── */
+    .collapse-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+      text-align: left;
+      gap: 0.5rem;
+    }
+    .collapse-header::-moz-focus-inner { border: 0; }
+    .collapse-chevron {
+      font-size: 0.9rem;
+      color: var(--muted);
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+    .collapse-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    /* weather-section collapse-header specific */
+    .weather-section .collapse-header {
+      padding: 0;
+      background: transparent;
+    }
+    /* section-block / agenda / notepad collapse-header inherits section-header styles */
+    .section-block .collapse-header,
+    .agenda-section .collapse-header,
+    .notepad-section .collapse-header {
+      background: var(--green-pale);
+      color: var(--green);
+      padding: 0.9rem 1.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-block .collapse-header h2,
+    .agenda-section .collapse-header h2,
+    .notepad-section .collapse-header h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
   </style>
 </head>
 <body>
@@ -696,14 +757,14 @@
   <h1>Chilling<br><em>Friends & Family</em></h1>
   <p class="header-meta">La Roche-en-Ardenne · 20 t/m 27 juli 2026</p>
   <div class="header-badges">
-    <span class="badge">🏡 Groepsaccommodatie</span>
-    <span class="badge">📅 7 nachten</span>
-    <span class="badge">🇧🇪 Ardennen</span>
+    <a class="hdr-btn" href="https://www.heerlijkehuisjes.nl/vakantiehuis-la-roche-en-ardenne/ARD1134" target="_blank">🏡 Bekijk het huisje</a>
+    <a class="hdr-btn" href="https://www.google.com/maps/dir/?api=1&destination=Val+du+Pierreux+2+La+Roche-en-Ardenne" target="_blank">🗺️ Navigeer</a>
+    <button class="hdr-btn" onclick="toggleWeather()">🌤️ Weer</button>
   </div>
 </header>
 
 <div class="countdown-section">
-  <p class="countdown-label">Nog tot vertrek op maandag 20 juli 10:00</p>
+  <p class="countdown-label">Nog tot aankomst op maandag 20 juli 17:00</p>
   <div class="countdown-grid">
     <div class="countdown-unit">
       <span class="countdown-number" id="cd-days">--</span>
@@ -724,13 +785,15 @@
   </div>
 </div>
 
-<div class="weather-section">
-  <div class="weather-header-row">
+<div class="weather-section" id="weather-section" style="display:none;">
+  <button class="collapse-header" onclick="toggleWeather()" aria-expanded="false" id="weather-toggle-btn">
     <span class="weather-label">🌤️ Weerbericht — La Roche-en-Ardenne</span>
-    <span class="weather-updated-tag" id="weather-updated"></span>
-  </div>
-  <div class="weather-forecast" id="weather-forecast">
-    <div class="weather-loading">Weerbericht ophalen…</div>
+    <span class="collapse-meta"><span class="weather-updated-tag" id="weather-updated"></span><span class="collapse-chevron">▾</span></span>
+  </button>
+  <div id="weather-body" style="display:none;">
+    <div class="weather-forecast" id="weather-forecast">
+      <div class="weather-loading">Weerbericht ophalen…</div>
+    </div>
   </div>
 </div>
 
@@ -738,26 +801,30 @@
 
   <!-- VERBLIJF -->
   <div class="section-block">
-    <div class="section-header">
-      <span class="section-icon">🏡</span>
-      <h2>Verblijf — ARD1134</h2>
-    </div>
-    <div class="section-body">
+    <button class="section-header collapse-header" onclick="toggleSection('verblijf-body', this)" aria-expanded="false">
+      <span style="display:flex;align-items:center;gap:0.6rem;"><span class="section-icon">🏡</span><h2>Verblijf — ARD1134</h2></span>
+      <span class="collapse-chevron">▾</span>
+    </button>
+    <div class="section-body" id="verblijf-body" style="display:none;">
       <div class="highlight-box">
-        Grote groepsaccommodatie aan de rand van La Roche, omgeven door <strong>bos, weide en water</strong>. Elk slaapkamer heeft eigen badkamer. Terras, tuin met vijver en volop ruimte voor actieve én ontspannen groepen.
+        Grote groepsaccommodatie aan de rand van La Roche, omgeven door <strong>bos, weide en water</strong>. Elk slaapkamer heeft eigen badkamer. Terras, tuin met vijver en volop ruimte voor actieve én ontspannen groepen. Twee vakantiehuizen (Huisje 1 &amp; 2) · circa <strong>40 personen</strong>.
       </div>
       <div class="info-row">
         <strong>Adres</strong>
-        <span>La Roche-en-Ardenne, België<br>
-        <a href="https://www.google.com/maps/dir/?api=1&destination=La+Roche-en-Ardenne+Belgium" target="_blank">🗺️ Navigeer via Google Maps</a></span>
+        <span><strong>Domaine Les Merlettes</strong><br>Val du Pierreux 2<br>6980 La Roche-en-Ardenne, België<br>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=Val+du+Pierreux+2+La+Roche-en-Ardenne" target="_blank">🗺️ Navigeer via Google Maps</a></span>
       </div>
       <div class="info-row">
         <strong>Check-in</strong>
-        <span>Maandag 20 juli</span>
+        <span>Maandag 20 juli · <strong>vanaf 17:00</strong></span>
       </div>
       <div class="info-row">
         <strong>Checkout</strong>
-        <span>Maandag 27 juli — voor 10:00</span>
+        <span>Maandag 27 juli · voor <strong>10:00</strong><br><span style="font-size:0.8rem;color:var(--muted);">Sleutels inleveren uiterlijk 09:30 bij Barbara/Rico</span></span>
+      </div>
+      <div class="info-row">
+        <strong>Sleutelbeheer</strong>
+        <span>Barbara &amp; Rico</span>
       </div>
       <div class="info-row">
         <strong>Boekingspagina</strong>
@@ -774,16 +841,18 @@
         <span class="chip">🚴 Fietsverhuur</span>
         <span class="chip">🛶 Kano verhuur</span>
         <span class="chip">🪣 Vlotten bouwen</span>
+        <span class="chip" style="background:#fff3cd;border-color:#f0c040;">⚠️ Geen zwembad</span>
       </div>
     </div>
   </div>
 
   <!-- PROGRAMMA -->
   <div class="agenda-section">
-    <div class="section-header">
-      <span class="section-icon">📅</span>
-      <h2>Weekschema</h2>
-    </div>
+    <button class="section-header collapse-header" onclick="toggleSection('agenda-body', this)" aria-expanded="false">
+      <span style="display:flex;align-items:center;gap:0.6rem;"><span class="section-icon">📅</span><h2>Weekschema</h2></span>
+      <span class="collapse-chevron">▾</span>
+    </button>
+    <div id="agenda-body" style="display:none;">
     <ul class="agenda-list" id="agenda-list">
       <li class="agenda-item"><span class="agenda-tag gold">Ma 20 jul</span><div class="agenda-content"><input class="agenda-input agenda-title" type="text" placeholder="Activiteit…" data-key="ma20-title" /><input class="agenda-input agenda-sub" type="text" placeholder="Toelichting…" data-key="ma20-sub" /></div></li>
       <li class="agenda-item"><span class="agenda-tag">Di 21 jul</span><div class="agenda-content"><input class="agenda-input agenda-title" type="text" placeholder="Activiteit…" data-key="di21-title" /><input class="agenda-input agenda-sub" type="text" placeholder="Toelichting…" data-key="di21-sub" /></div></li>
@@ -794,15 +863,16 @@
       <li class="agenda-item"><span class="agenda-tag">Zo 26 jul</span><div class="agenda-content"><input class="agenda-input agenda-title" type="text" placeholder="Activiteit…" data-key="zo26-title" /><input class="agenda-input agenda-sub" type="text" placeholder="Toelichting…" data-key="zo26-sub" /></div></li>
       <li class="agenda-item"><span class="agenda-tag gold">Ma 27 jul</span><div class="agenda-content"><input class="agenda-input agenda-title" type="text" placeholder="Activiteit…" data-key="ma27-title" /><input class="agenda-input agenda-sub" type="text" placeholder="Toelichting…" data-key="ma27-sub" /></div></li>
     </ul>
+    </div>
   </div>
 
   <!-- OMGEVING & ACTIVITEITEN -->
   <div class="section-block">
-    <div class="section-header">
-      <span class="section-icon">🌲</span>
-      <h2>Omgeving &amp; Activiteiten</h2>
-    </div>
-    <div class="section-body">
+    <button class="section-header collapse-header" onclick="toggleSection('omgeving-body', this)" aria-expanded="false">
+      <span style="display:flex;align-items:center;gap:0.6rem;"><span class="section-icon">🌲</span><h2>Omgeving &amp; Activiteiten</h2></span>
+      <span class="collapse-chevron">▾</span>
+    </button>
+    <div class="section-body" id="omgeving-body" style="display:none;">
       <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.06em;">Vanuit het huis te huren</p>
       <div class="chip-list" style="margin-bottom:1rem;">
         <span class="chip">🚴 Mountainbike</span>
@@ -827,11 +897,11 @@
 
   <!-- SUPERMARKTEN -->
   <div class="section-block">
-    <div class="section-header">
-      <span class="section-icon">🛒</span>
-      <h2>Supermarkten in de buurt</h2>
-    </div>
-    <div class="section-body" style="padding:0;">
+    <button class="section-header collapse-header" onclick="toggleSection('supermarkt-body', this)" aria-expanded="false">
+      <span style="display:flex;align-items:center;gap:0.6rem;"><span class="section-icon">🛒</span><h2>Supermarkten in de buurt</h2></span>
+      <span class="collapse-chevron">▾</span>
+    </button>
+    <div class="section-body" id="supermarkt-body" style="display:none;padding:0;">
       <table class="info-table">
         <thead>
           <tr>
@@ -843,17 +913,17 @@
         <tbody>
           <tr>
             <td>🛒 SPAR La Roche<br><span style="color:var(--muted);font-size:0.75rem;">Quai du Gravier 1, La Roche</span></td>
-            <td>Ma–Za 08–19 · Zo 09–13</td>
+            <td>Ma–Vr 08:30–19 · Za 08:30–18 · Zo 08:30–12</td>
             <td><a href="https://www.google.com/maps/dir/?api=1&destination=Spar+La+Roche-en-Ardenne" target="_blank">🗺️ Route</a></td>
           </tr>
           <tr>
             <td>🛒 Colruyt Marche-en-Famenne<br><span style="color:var(--muted);font-size:0.75rem;">~20 km</span></td>
-            <td>Ma–Za 08–19:30 · Zo gesloten</td>
+            <td>Ma–Do 08–20 · Vr 08–21 · Za 08–20 · Zo gesloten</td>
             <td><a href="https://www.google.com/maps/dir/?api=1&destination=Colruyt+Marche-en-Famenne" target="_blank">🗺️ Route</a></td>
           </tr>
           <tr>
             <td>🛒 Lidl Marche-en-Famenne<br><span style="color:var(--muted);font-size:0.75rem;">~20 km</span></td>
-            <td>Ma–Za 08–20 · Zo 09–13</td>
+            <td>Ma–Vr 08:30–20 · Za 08:30–19 · Zo gesloten</td>
             <td><a href="https://www.google.com/maps/dir/?api=1&destination=Lidl+Marche-en-Famenne" target="_blank">🗺️ Route</a></td>
           </tr>
           <tr>
@@ -868,11 +938,11 @@
 
   <!-- HANDIG TIJDENS VERBLIJF -->
   <div class="section-block">
-    <div class="section-header">
-      <span class="section-icon">ℹ️</span>
-      <h2>Handig tijdens verblijf</h2>
-    </div>
-    <div class="section-body">
+    <button class="section-header collapse-header" onclick="toggleSection('handig-body', this)" aria-expanded="false">
+      <span style="display:flex;align-items:center;gap:0.6rem;"><span class="section-icon">ℹ️</span><h2>Handig tijdens verblijf</h2></span>
+      <span class="collapse-chevron">▾</span>
+    </button>
+    <div class="section-body" id="handig-body" style="display:none;">
       <div class="info-row">
         <strong>Noodlijn BE</strong>
         <span>112</span>
@@ -897,15 +967,32 @@
         <strong>Rijbewijs</strong>
         <span>Nederlands rijbewijs geldig in België</span>
       </div>
+      <div class="info-row">
+        <strong>EHBO'ers</strong>
+        <span>Dennis · Hummy · Jaimy · Daphney · Barbara<br><span style="font-size:0.8rem;color:var(--muted);">Daphney brengt EHBO-koffer incl. tekenpen · dagelijks controleren op teken</span></span>
+      </div>
+      <div class="info-row">
+        <strong>Rookverbod</strong>
+        <span>Binnen en op slaapkamers</span>
+      </div>
+      <div class="info-row">
+        <strong>Bezoek</strong>
+        <span>Overnachten €50,- per nacht (gaat naar vakantiepot)</span>
+      </div>
+      <div class="info-row">
+        <strong>Reistijd</strong>
+        <span>~3,5 uur</span>
+      </div>
     </div>
   </div>
 
   <!-- NOTITIEBLOK -->
   <div class="notepad-section">
-    <div class="section-header">
-      <span class="section-icon">📝</span>
-      <h2>Afspraken &amp; agenda</h2>
-    </div>
+    <button class="section-header collapse-header" onclick="toggleSection('notepad-body-wrap', this)" aria-expanded="false">
+      <span style="display:flex;align-items:center;gap:0.6rem;"><span class="section-icon">📝</span><h2>Afspraken &amp; agenda</h2></span>
+      <span class="collapse-chevron">▾</span>
+    </button>
+    <div id="notepad-body-wrap" style="display:none;">
     <div class="notepad-tabs" id="notepad-tabs">
       <button class="notepad-tab active" data-tab="programma">Programma</button>
       <button class="notepad-tab" data-tab="mensen">Mensen</button>
@@ -928,6 +1015,7 @@
         <button class="notepad-btn-secondary" onclick="printEntries()">Afdrukken</button>
       </div>
     </div>
+    </div>
   </div>
 
 </main>
@@ -939,7 +1027,7 @@
 <script>
   // COUNTDOWN
   function updateCountdown() {
-    const target = new Date('2026-07-20T10:00:00');
+    const target = new Date('2026-07-20T17:00:00');
     const now = new Date();
     const diff = target - now;
     if (diff <= 0) {
@@ -1080,7 +1168,25 @@
 
 
   // AGENDA INPUTS - localStorage opslag
-  const agendaStore = JSON.parse(localStorage.getItem('rack-agenda') || '{}');
+  const agendaDefaults = {
+    'ma20-title': 'Aankomst 🚗',
+    'ma20-sub':   'Check-in vanaf 17:00 · Eigen maaltijd',
+    'di21-title': 'Kidsclub 13–16u 🧒 · Tante Eugenie kookt 🍲',
+    'di21-sub':   'Moksi Alesi of Pasta · Tikkie vooraf',
+    'wo22-title': 'Kidsclub 13–16u 🧒 · Jacqueline kookt 🍜 · Karaoke avond 🎤',
+    'wo22-sub':   'Saoto · Dennis neemt JBL box mee',
+    'do23-title': 'Kidsclub 13–16u 🧒 · Tante Eugenie kookt 🍲',
+    'do23-sub':   'Moksi Alesi of Pasta · Tikkie vooraf',
+    'vr24-title': 'Kidsclub 13–16u 🧒 · Gezamenlijke BBQ 🔥',
+    'vr24-sub':   'Kosten worden verdeeld · opgeven: vegetarisch / allergieën',
+    'za25-title': 'Kidsclub 13–16u 🧒 · Bonte Avond 20:00u 🎉 · Eigen maaltijd',
+    'za25-sub':   'Thema via poll · prijs voor leukste bijdrage',
+    'zo26-title': 'Gezamenlijk opruimen 🧹',
+    'zo26-sub':   'Keuken niet voor uitgebreid koken · groepsfoto!',
+    'ma27-title': 'Vertrek 🏠',
+    'ma27-sub':   'Sleutels inleveren 09:30 · Check-out 10:00',
+  };
+  const agendaStore = Object.assign({}, agendaDefaults, JSON.parse(localStorage.getItem('rack-agenda') || '{}'));
 
   function saveAgenda() {
     localStorage.setItem('rack-agenda', JSON.stringify(agendaStore));
@@ -1096,6 +1202,36 @@
   });
 
   renderList();
+
+  // COLLAPSE HELPERS
+  function toggleSection(bodyId, btn) {
+    const body = document.getElementById(bodyId);
+    const open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : 'block';
+    btn.setAttribute('aria-expanded', String(!open));
+    const chev = btn.querySelector('.collapse-chevron');
+    if (chev) chev.style.transform = open ? '' : 'rotate(180deg)';
+  }
+
+  function toggleWeather() {
+    const section = document.getElementById('weather-section');
+    const body    = document.getElementById('weather-body');
+    const btn     = document.getElementById('weather-toggle-btn');
+    section.style.display = 'block';
+    const open = body && body.style.display !== 'none';
+    if (body) body.style.display = open ? 'none' : 'block';
+    if (btn) {
+      btn.setAttribute('aria-expanded', String(!open));
+      const chev = btn.querySelector('.collapse-chevron');
+      if (chev) chev.style.transform = open ? '' : 'rotate(180deg)';
+    }
+    if (!open === false) section.style.display = 'none';
+  }
+
+  // Sync header 🌤️ button with inline toggle
+  document.addEventListener('DOMContentLoaded', () => {
+    // weather section stays hidden until toggled
+  });
 
   // DARK MODE
   function toggleTheme() {
