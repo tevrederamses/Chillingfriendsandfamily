@@ -12,13 +12,13 @@
       --green:       #1a3d2b;
       --green-mid:   #2d6a4f;
       --green-light: #52b788;
-      --green-pale:  #edf4ef;
+      --green-pale:  #f7faf8;
       --gold:        #b8862a;
       --text:        #1a1e1b;
       --muted:       #62756a;
-      --bg:          #f2f4f2;
+      --bg:          #ffffff;
       --card:        #ffffff;
-      --border:      #e0e8e2;
+      --border:      #e8eeea;
       --shadow-sm:   0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
       --shadow-md:   0 2px 8px rgba(0,0,0,0.07), 0 12px 32px rgba(0,0,0,0.06);
       --radius:      14px;
@@ -69,7 +69,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, rgba(10,30,18,0.55) 0%, rgba(10,30,18,0.3) 60%, rgba(10,30,18,0.7) 100%);
+      background: linear-gradient(to bottom, rgba(10,30,18,0.35) 0%, rgba(10,30,18,0.15) 55%, rgba(10,30,18,0.5) 100%);
     }
     header > * { position: relative; z-index: 1; }
 
@@ -132,7 +132,8 @@
 
     /* ── COUNTDOWN ───────────────────────────────── */
     .countdown-section {
-      background: var(--green);
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
       padding: 1.75rem 1.5rem;
       text-align: center;
     }
@@ -141,7 +142,7 @@
       font-weight: 600;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
+      color: var(--muted);
       margin-bottom: 1rem;
     }
     .countdown-grid {
@@ -152,18 +153,17 @@
     }
     .countdown-unit {
       text-align: center;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: var(--green-pale);
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 0.75rem 1.1rem;
       min-width: 70px;
-      backdrop-filter: blur(4px);
     }
     .countdown-number {
       font-family: 'Inter', sans-serif;
       font-size: 2rem;
       font-weight: 300;
-      color: #fff;
+      color: var(--green);
       line-height: 1;
       display: block;
       letter-spacing: -0.02em;
@@ -173,7 +173,7 @@
       font-weight: 600;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
+      color: var(--muted);
       margin-top: 0.35rem;
     }
 
@@ -382,6 +382,13 @@
       font-size: 0.77rem;
       font-weight: 500;
       color: var(--text);
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    a.chip:hover {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
     }
 
     /* ── HIGHLIGHT BOX ───────────────────────────── */
@@ -644,27 +651,63 @@
       top: 1rem;
       left: 1rem;
       z-index: 100;
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.25);
+      background: var(--green-pale);
+      backdrop-filter: none;
+      border: 1px solid var(--green);
       border-radius: 2rem;
       padding: 0.45rem 1rem;
       font-size: 0.75rem;
       font-weight: 600;
       cursor: pointer;
       font-family: 'Inter', sans-serif;
-      color: #fff;
+      color: var(--green);
       letter-spacing: 0.05em;
       transition: background 0.2s;
     }
-    .theme-toggle:hover { background: rgba(255,255,255,0.25); }
+    .theme-toggle:hover { background: var(--border); }
+    [data-theme="dark"] .topnav {
+      background: var(--green);
+      border-bottom-color: rgba(255,255,255,0.08);
+    }
+    [data-theme="dark"] .topnav-link {
+      color: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.2);
+    }
+    [data-theme="dark"] .topnav-link:hover {
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+    }
+    [data-theme="dark"] .countdown-section {
+      background: var(--green);
+      border-bottom-color: transparent;
+    }
+    [data-theme="dark"] .countdown-label {
+      color: rgba(255,255,255,0.45);
+    }
+    [data-theme="dark"] .countdown-unit {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.12);
+      backdrop-filter: blur(4px);
+    }
+    [data-theme="dark"] .countdown-number {
+      color: #fff;
+    }
+    [data-theme="dark"] .countdown-unit-label {
+      color: rgba(255,255,255,0.45);
+    }
     [data-theme="dark"] .theme-toggle {
-      background: rgba(0,0,0,0.3);
-      border-color: rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      border-color: rgba(255,255,255,0.25);
+      color: #fff;
+    }
+    [data-theme="dark"] .theme-toggle:hover {
+      background: rgba(255,255,255,0.25);
     }
     /* ── TOP NAV ─────────────────────────────────── */
     .topnav {
-      background: var(--green);
+      background: #ffffff;
       padding: 0.6rem 1.25rem;
       display: flex;
       justify-content: flex-end;
@@ -672,23 +715,23 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid var(--border);
     }
     .topnav-link {
-      color: rgba(255,255,255,0.85);
+      color: var(--green);
       text-decoration: none;
       font-size: 0.78rem;
       font-weight: 600;
       letter-spacing: 0.05em;
       padding: 0.35rem 0.85rem;
       border-radius: 2rem;
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--green);
+      background: var(--green-pale);
       transition: background 0.15s, color 0.15s;
     }
     .topnav-link:hover {
-      background: rgba(255,255,255,0.18);
-      color: #fff;
+      background: var(--green-pale);
+      color: var(--green);
     }
 
 
@@ -881,15 +924,15 @@
       </div>
       <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.06em;">In de omgeving</p>
       <div class="chip-list" style="margin-bottom:1rem;">
-        <span class="chip">🏰 Kasteel La Roche</span>
-        <span class="chip">🏛️ Battle of the Bulge museum</span>
-        <span class="chip">🌊 Grotten van Hotton</span>
-        <span class="chip">🏘️ Durbuy</span>
-        <span class="chip">🦌 Wildpark Han-sur-Lesse</span>
-        <span class="chip">🧗 Klimmen & abseilen</span>
-        <span class="chip">🎯 Paintball</span>
-        <span class="chip">🚵 Quad rijden</span>
-        <span class="chip">🪂 Paragliding</span>
+        <a class="chip" href="https://www.chateaudelaroche.be/nl-NL/" target="_blank">🏰 Kasteel La Roche</a>
+        <a class="chip" href="https://www.bastognewarmuseum.be/" target="_blank">🏛️ Bastogne War Museum</a>
+        <a class="chip" href="https://grottesdehotton.be/" target="_blank">🌊 Grotten van Hotton</a>
+        <a class="chip" href="https://durbuytourisme.be/" target="_blank">🏘️ Durbuy</a>
+        <a class="chip" href="https://grotte-de-han.be/nl/" target="_blank">🦌 Wildpark Han-sur-Lesse</a>
+        <a class="chip" href="https://www.google.com/maps/search/klimmen+abseilen+La+Roche-en-Ardenne" target="_blank">🧗 Klimmen &amp; abseilen</a>
+        <a class="chip" href="https://www.google.com/maps/search/paintball+La+Roche-en-Ardenne" target="_blank">🎯 Paintball</a>
+        <a class="chip" href="https://www.google.com/maps/search/quad+La+Roche-en-Ardenne" target="_blank">🚵 Quad rijden</a>
+        <a class="chip" href="https://www.google.com/maps/search/paragliding+La+Roche-en-Ardenne" target="_blank">🪂 Paragliding</a>
       </div>
       <a class="link-btn secondary" href="https://www.google.com/maps/search/activiteiten+La+Roche-en-Ardenne" target="_blank">🗺️ Bekijk op kaart</a>
     </div>
@@ -914,22 +957,22 @@
           <tr>
             <td>🛒 SPAR La Roche<br><span style="color:var(--muted);font-size:0.75rem;">Quai du Gravier 1, La Roche</span></td>
             <td>Ma–Vr 08:30–19 · Za 08:30–18 · Zo 08:30–12</td>
-            <td><a href="https://www.google.com/maps/dir/?api=1&destination=Spar+La+Roche-en-Ardenne" target="_blank">🗺️ Route</a></td>
+            <td><a href="https://www.google.com/maps/dir/?api=1&destination=Quai+du+Gravier+1,+6980+La+Roche-en-Ardenne" target="_blank">🗺️ Route</a></td>
           </tr>
           <tr>
-            <td>🛒 Colruyt Marche-en-Famenne<br><span style="color:var(--muted);font-size:0.75rem;">~20 km</span></td>
+            <td>🛒 Colruyt Marche-en-Famenne<br><span style="color:var(--muted);font-size:0.75rem;">Vieille Route de Liège 10 · ~20 km</span></td>
             <td>Ma–Do 08–20 · Vr 08–21 · Za 08–20 · Zo gesloten</td>
-            <td><a href="https://www.google.com/maps/dir/?api=1&destination=Colruyt+Marche-en-Famenne" target="_blank">🗺️ Route</a></td>
+            <td><a href="https://www.google.com/maps/dir/?api=1&destination=Vieille+Route+de+Liège+10,+6900+Marche-en-Famenne" target="_blank">🗺️ Route</a></td>
           </tr>
           <tr>
-            <td>🛒 Lidl Marche-en-Famenne<br><span style="color:var(--muted);font-size:0.75rem;">~20 km</span></td>
+            <td>🛒 Lidl Marche-en-Famenne<br><span style="color:var(--muted);font-size:0.75rem;">Rue du Parc Industriel 10a · ~20 km</span></td>
             <td>Ma–Vr 08:30–20 · Za 08:30–19 · Zo gesloten</td>
-            <td><a href="https://www.google.com/maps/dir/?api=1&destination=Lidl+Marche-en-Famenne" target="_blank">🗺️ Route</a></td>
+            <td><a href="https://www.google.com/maps/dir/?api=1&destination=Rue+du+Parc+Industriel+10a,+6900+Marche-en-Famenne" target="_blank">🗺️ Route</a></td>
           </tr>
           <tr>
-            <td>🛒 Carrefour Bastogne<br><span style="color:var(--muted);font-size:0.75rem;">~30 km</span></td>
-            <td>Ma–Za 08–20 · Zo 09–18</td>
-            <td><a href="https://www.google.com/maps/dir/?api=1&destination=Carrefour+Bastogne" target="_blank">🗺️ Route</a></td>
+            <td>🛒 Carrefour Market Bastogne<br><span style="color:var(--muted);font-size:0.75rem;">Route de Marche 149 · ~30 km</span></td>
+            <td>Ma–Za 08:30–19 · Zo gesloten</td>
+            <td><a href="https://www.google.com/maps/dir/?api=1&destination=Route+de+Marche+149,+6600+Bastogne" target="_blank">🗺️ Route</a></td>
           </tr>
         </tbody>
       </table>
@@ -986,37 +1029,6 @@
     </div>
   </div>
 
-  <!-- NOTITIEBLOK -->
-  <div class="notepad-section">
-    <button class="section-header collapse-header" onclick="toggleSection('notepad-body-wrap', this)" aria-expanded="false">
-      <span style="display:flex;align-items:center;gap:0.6rem;"><span class="section-icon">📝</span><h2>Afspraken &amp; agenda</h2></span>
-      <span class="collapse-chevron">▾</span>
-    </button>
-    <div id="notepad-body-wrap" style="display:none;">
-    <div class="notepad-tabs" id="notepad-tabs">
-      <button class="notepad-tab active" data-tab="programma">Programma</button>
-      <button class="notepad-tab" data-tab="mensen">Mensen</button>
-      <button class="notepad-tab" data-tab="taken">Taken</button>
-      <button class="notepad-tab" data-tab="kosten">Kosten</button>
-      <button class="notepad-tab" data-tab="activiteit">Activiteit</button>
-      <button class="notepad-tab" data-tab="vervoer">Vervoer</button>
-      <button class="notepad-tab" data-tab="contact">Contact</button>
-      <button class="notepad-tab" data-tab="overig">Overig</button>
-    </div>
-    <div class="notepad-body">
-      <div id="active-tab-label" style="font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem;">Programma</div>
-      <div class="notepad-new">
-        <input id="notepad-text" class="notepad-input" type="text" placeholder="Nieuw onderwerp toevoegen…" />
-        <button class="notepad-btn" onclick="addEntry()">Toevoegen</button>
-      </div>
-      <ul class="notepad-entries" id="notepad-list"></ul>
-      <div class="notepad-actions">
-        <button class="notepad-btn-secondary" onclick="clearEntries()">Alles wissen</button>
-        <button class="notepad-btn-secondary" onclick="printEntries()">Afdrukken</button>
-      </div>
-    </div>
-    </div>
-  </div>
 
 </main>
 
