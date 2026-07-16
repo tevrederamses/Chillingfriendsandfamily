@@ -1198,7 +1198,9 @@
     'ma27-title': 'Vertrek 🏠',
     'ma27-sub':   'Sleutels inleveren 09:30 · Check-out 10:00',
   };
-  const agendaStore = Object.assign({}, agendaDefaults, JSON.parse(localStorage.getItem('rack-agenda') || '{}'));
+  const agendaStore = Object.assign({}, agendaDefaults);
+  const _saved = JSON.parse(localStorage.getItem('rack-agenda') || '{}');
+  Object.keys(_saved).forEach(k => { if (_saved[k]) agendaStore[k] = _saved[k]; });
 
   function saveAgenda() {
     localStorage.setItem('rack-agenda', JSON.stringify(agendaStore));
