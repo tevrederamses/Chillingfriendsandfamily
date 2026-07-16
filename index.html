@@ -1116,69 +1116,6 @@
   }
   loadWeather();
 
-  // NOTEPAD
-  let activeTab = 'programma';
-  let notes = JSON.parse(localStorage.getItem('rack-notes') || '{}');
-
-  function saveNotes() {
-    localStorage.setItem('rack-notes', JSON.stringify(notes));
-  }
-  function renderList() {
-    const list = document.getElementById('notepad-list');
-    const entries = notes[activeTab] || [];
-    list.innerHTML = entries.length === 0
-      ? '<li style="color:var(--muted);font-size:0.82rem;padding:0.5rem 0;">Nog geen notities.</li>'
-      : entries.map((e, i) => `
-        <li class="notepad-entry">
-          <span class="notepad-entry-tag">${activeTab}</span>
-          <span style="flex:1">${e}</span>
-          <button class="entry-del" onclick="deleteEntry(${i})" title="Verwijder">✕</button>
-        </li>`).join('');
-  }
-  function addEntry() {
-    const input = document.getElementById('notepad-text');
-    const val = input.value.trim();
-    if (!val) return;
-    if (!notes[activeTab]) notes[activeTab] = [];
-    notes[activeTab].push(val);
-    saveNotes();
-    renderList();
-    input.value = '';
-    input.focus();
-  }
-  function deleteEntry(i) {
-    notes[activeTab].splice(i, 1);
-    saveNotes();
-    renderList();
-  }
-  function clearEntries() {
-    if (!confirm('Alle notities in dit tabblad wissen?')) return;
-    notes[activeTab] = [];
-    saveNotes();
-    renderList();
-  }
-  function printEntries() {
-    const entries = (notes[activeTab] || []).join('\n');
-    const w = window.open('');
-    w.document.write(`<pre style="font-family:sans-serif;padding:2rem;">${activeTab.toUpperCase()}\n\n${entries || 'Geen notities.'}</pre>`);
-    w.print();
-  }
-
-  document.getElementById('notepad-tabs').addEventListener('click', e => {
-    const btn = e.target.closest('.notepad-tab');
-    if (!btn) return;
-    document.querySelectorAll('.notepad-tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activeTab = btn.dataset.tab;
-    document.getElementById('active-tab-label').textContent = activeTab.charAt(0).toUpperCase() + activeTab.slice(1);
-    renderList();
-  });
-
-  document.getElementById('notepad-text').addEventListener('keydown', e => {
-    if (e.key === 'Enter') addEntry();
-  });
-
-
   // AGENDA INPUTS - localStorage opslag
   const agendaDefaults = {
     'ma20-title': 'Aankomst 🚗',
@@ -1214,8 +1151,6 @@
       saveAgenda();
     });
   });
-
-  renderList();
 
   // COLLAPSE HELPERS
   function toggleSection(bodyId, btn) {
